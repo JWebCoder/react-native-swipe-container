@@ -6,7 +6,7 @@ This is based on the great work from [glepur is react-native-swipe-gestures](htt
 
 ## Installation
 
-`npm i -S react-native-swipe`
+`npm i -S react-native-swipe-container`
 
 ## Usage
 
