@@ -8,11 +8,13 @@
   ],
   "scripts": {
     "flow": "flow",
-    "build": "babel src/ -d lib && flow-copy-source src lib"
+    "prepublish": "npm run babel-prepublish && npm run flow-prepublish",
+    "babel-prepublish": "babel src/ -d lib",
+    "flow-prepublish": "flow-copy-source src lib"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:JWebCoder/react-native-swipe-gestures.git"
+    "url": "git@github.com:JWebCoder/react-native-swipe-container.git"
   },
   "keywords": [
     "react-native",
@@ -20,9 +22,9 @@
     "gesture"
   ],
   "bugs": {
-    "url": "https://github.com/glepur/react-native-swipe-gestures/issues"
+    "url": "https://github.com/JWebCoder/react-native-swipe-container/issues"
   },
-  "author": "Goran Lepur <goran.lepur1@gmail.com>",
+  "author": "João Moura <joao87moura@gmail.com>",
   "license": "MIT",
   "peerDependencies": {
     "react": "^16.0.0",

@@ -1,4 +1,4 @@
-# react-native-swipe
+# react-native-swipe-container
 
 React Native component for handling swipe gestures in up, down, left and right direction.
 
@@ -15,7 +15,7 @@ This is based on the great work from [glepur is react-native-swipe-gestures](htt
 
 import React, {Component} from 'react';
 import {View, Text} from 'react-native';
-import GestureRecognizer, {swipeDirections} from 'react-native-swipe';
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-container';
 
 class SomeComponent extends Component {
 
