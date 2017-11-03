@@ -1,6 +1,6 @@
 {
   "name": "react-native-swipe-container",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "4-directional swipe gestures for react-native",
   "main": "lib/index.js",
   "files": [
@@ -41,8 +41,5 @@
     "eslint-plugin-react-native": "^3.1.0",
     "flow-bin": "^0.58.0",
     "flow-copy-source": "^1.2.1"
-  },
-  "dependencies": {
-    "react-native": "^0.49.5"
   }
 }
