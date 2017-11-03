@@ -1,14 +1,18 @@
 {
-  "name": "react-native-swipe-gestures",
-  "version": "1.0.2",
+  "name": "react-native-swipe-container",
+  "version": "1.0.0",
   "description": "4-directional swipe gestures for react-native",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "flow": "flow",
+    "build": "babel src/ -d lib && flow-copy-source src lib"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:glepur/react-native-swipe-gestures.git"
+    "url": "git@github.com:JWebCoder/react-native-swipe-gestures.git"
   },
   "keywords": [
     "react-native",
@@ -19,5 +23,24 @@
     "url": "https://github.com/glepur/react-native-swipe-gestures/issues"
   },
   "author": "Goran Lepur <goran.lepur1@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "peerDependencies": {
+    "react": "^16.0.0",
+    "react-native": "^0.49.5"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.0.1",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-preset-react-native": "^4.0.0",
+    "eslint": "^4.10.0",
+    "eslint-config-standard-flow": "^1.0.1",
+    "eslint-plugin-react": "^7.4.0",
+    "eslint-plugin-react-native": "^3.1.0",
+    "flow-bin": "^0.58.0",
+    "flow-copy-source": "^1.2.1"
+  },
+  "dependencies": {
+    "react-native": "^0.49.5"
+  }
 }

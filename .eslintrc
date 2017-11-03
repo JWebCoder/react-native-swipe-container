@@ -1,0 +1,12 @@
+{
+  "parser": "babel-eslint",
+  "plugins": ["react","react-native"],
+  "extends": ["plugin:react-native/all", "standard-flow"],
+  "rules": {
+    "react/jsx-uses-vars": 1,
+    "react-native/no-unused-styles": 2,
+    "react-native/split-platform-components": 2,
+    "react-native/no-inline-styles": 2,
+    "react-native/no-color-literals": 2,
+  }
+}
