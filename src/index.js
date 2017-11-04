@@ -3,7 +3,7 @@
 import React from 'react'
 import {View, PanResponder} from 'react-native'
 
-type GestureState = {
+export type GestureState = {
   stateID: string,
   x0: number,
   y0: number,
@@ -134,7 +134,7 @@ class GestureRecognizer extends React.Component<Props> {
         ? SWIPE_DOWN
         : SWIPE_UP
     }
-    return null
+    return ''
   }
 
   _isValidHorizontalSwipe (gestureState: GestureState) {
