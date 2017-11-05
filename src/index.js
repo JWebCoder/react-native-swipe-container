@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react'
+import * as React from 'react'
 import {View, PanResponder} from 'react-native'
 
 export type GestureState = {
@@ -15,18 +15,12 @@ export type GestureState = {
   moveY: number
 }
 
-export type SwipeConfig = {
-  velocityThreshold: number,
-  directionalOffsetThreshold: number
-}
-
 export type Props = {
-  config: SwipeConfig,
-  onSwipe: (swipeDirection: string, gestureState: GestureState) => mixed,
-  onSwipeUp: (gestureState: GestureState) => mixed,
-  onSwipeDown: (gestureState: GestureState) => mixed,
-  onSwipeLeft: (gestureState: GestureState) => mixed,
-  onSwipeRight: (gestureState: GestureState) => mixed
+  velocityThreshold: number,
+  distanceThreshold: number,
+  angleThreshold: number,
+  diagonalSwipe: boolean,
+  onSwipe?: (swipeDirection: string, gestureState: GestureState) => mixed
 }
 
 type EventLike = {
@@ -47,34 +41,37 @@ export const swipeDirections = {
   SWIPE_UP: 'SWIPE_UP',
   SWIPE_DOWN: 'SWIPE_DOWN',
   SWIPE_LEFT: 'SWIPE_LEFT',
-  SWIPE_RIGHT: 'SWIPE_RIGHT'
+  SWIPE_RIGHT: 'SWIPE_RIGHT',
+  SWIPE_UP_LEFT: 'SWIPE_UP_LEFT',
+  SWIPE_UP_RIGHT: 'SWIPE_UP_RIGHT',
+  SWIPE_DOWN_LEFT: 'SWIPE_DOWN_LEFT',
+  SWIPE_DOWN_RIGHT: 'SWIPE_DOWN_RIGHT'
 }
 
-const swipeConfig: SwipeConfig = {
-  velocityThreshold: 0.3,
-  directionalOffsetThreshold: 80
+function isValidSwipe (velocity: number, velocityThreshold: number, distance: number, distanceThreshold: number): boolean {
+  return Math.abs(velocity) > velocityThreshold && Math.abs(distance) > distanceThreshold
 }
 
-function isValidSwipe (velocity: number, velocityThreshold: number, directionalOffset: number, directionalOffsetThreshold: number): boolean {
-  return Math.abs(velocity) > velocityThreshold && Math.abs(directionalOffset) < directionalOffsetThreshold
+function getAngle (x: number, y: number): number {
+  return Math.atan((-y) / x) * 180 / Math.PI
+}
+
+function getMaxVelocity (x: number, y:number): number {
+  return Math.max(Math.abs(x), Math.abs(y))
+}
+
+function getDistance (x: number, y:number): number {
+  return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))
 }
 
 class GestureRecognizer extends React.Component<Props> {
-  swipeConfig: SwipeConfig
+  _panResponder: any
 
-  constructor (props: Props) {
-    super(props)
-    this.swipeConfig = {
-      ...swipeConfig,
-      ...props.config
-    }
-  }
-
-  componentWillReceiveProps (props: Props) {
-    this.swipeConfig = {
-      ...swipeConfig,
-      ...props.config
-    }
+  static defaultProps = {
+    velocityThreshold: 0.3,
+    distanceThreshold: 40,
+    angleThreshold: 15,
+    diagonalSwipe: true
   }
 
   componentWillMount () {
@@ -99,54 +96,54 @@ class GestureRecognizer extends React.Component<Props> {
 
   _handlePanResponderEnd (evt: EventLike, gestureState: GestureState) {
     const swipeDirection = this._getSwipeDirection(gestureState)
-    this._triggerSwipeHandlers(swipeDirection, gestureState)
+    this._triggerSwipeHandlers(swipeDirection || '', gestureState)
   }
 
   _triggerSwipeHandlers (swipeDirection: string, gestureState: GestureState) {
-    const {onSwipe, onSwipeUp, onSwipeDown, onSwipeLeft, onSwipeRight} = this.props
-    const {SWIPE_LEFT, SWIPE_RIGHT, SWIPE_UP, SWIPE_DOWN} = swipeDirections
+    const { onSwipe } = this.props
     onSwipe && onSwipe(swipeDirection, gestureState)
-    switch (swipeDirection) {
-      case SWIPE_LEFT:
-        onSwipeLeft && onSwipeLeft(gestureState)
-        break
-      case SWIPE_RIGHT:
-        onSwipeRight && onSwipeRight(gestureState)
-        break
-      case SWIPE_UP:
-        onSwipeUp && onSwipeUp(gestureState)
-        break
-      case SWIPE_DOWN:
-        onSwipeDown && onSwipeDown(gestureState)
-        break
-    }
   }
 
-  _getSwipeDirection (gestureState: GestureState): string {
-    const {SWIPE_LEFT, SWIPE_RIGHT, SWIPE_UP, SWIPE_DOWN} = swipeDirections
-    const {dx, dy} = gestureState
-    if (this._isValidHorizontalSwipe(gestureState)) {
+  _getSwipeDirection (gestureState: GestureState): string | null {
+    const {
+      SWIPE_LEFT,
+      SWIPE_RIGHT,
+      SWIPE_UP,
+      SWIPE_DOWN,
+      SWIPE_UP_LEFT,
+      SWIPE_UP_RIGHT,
+      SWIPE_DOWN_LEFT,
+      SWIPE_DOWN_RIGHT
+    } = swipeDirections
+    const { dx, dy, vx, vy } = gestureState
+    const {velocityThreshold, distanceThreshold, angleThreshold, diagonalSwipe} = this.props
+    const distance = getDistance(dx, dy)
+
+    if (!isValidSwipe(getMaxVelocity(vx, vy), velocityThreshold, distance, distanceThreshold)) {
+      return null
+    }
+
+    const angle = getAngle(dx, dy)
+    const angleAbs = Math.abs(angle)
+    if (angleAbs < angleThreshold) {
       return (dx > 0)
         ? SWIPE_RIGHT
         : SWIPE_LEFT
-    } else if (this._isValidVerticalSwipe(gestureState)) {
+    } else if (angleAbs > (90 - angleThreshold)) {
       return (dy > 0)
         ? SWIPE_DOWN
         : SWIPE_UP
+    } else if (diagonalSwipe) {
+      return (dx > 0)
+        ? (dy > 0)
+          ? SWIPE_DOWN_RIGHT
+          : SWIPE_UP_RIGHT
+        : (dy > 0)
+          ? SWIPE_DOWN_LEFT
+          : SWIPE_UP_LEFT
     }
-    return ''
-  }
 
-  _isValidHorizontalSwipe (gestureState: GestureState) {
-    const {vx, dy} = gestureState
-    const {velocityThreshold, directionalOffsetThreshold} = this.swipeConfig
-    return isValidSwipe(vx, velocityThreshold, dy, directionalOffsetThreshold)
-  }
-
-  _isValidVerticalSwipe (gestureState) {
-    const {vy, dx} = gestureState
-    const {velocityThreshold, directionalOffsetThreshold} = this.swipeConfig
-    return isValidSwipe(vy, velocityThreshold, dx, directionalOffsetThreshold)
+    return null
   }
 
   render () {
