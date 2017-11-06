@@ -11,19 +11,35 @@ This is based on the great work from [glepur is react-native-swipe-gestures](htt
 ## Usage
 
 ```javascript
-'use strict';
+// @flow
 
-import React, {Component} from 'react';
-import {View, Text} from 'react-native';
-import GestureRecognizer, {swipeDirections} from 'react-native-swipe-container';
+import * as React from 'react'
+import { Text, StyleSheet } from 'react-native'
 
-class SomeComponent extends Component {
+// react-native-swipe-container
+import GestureRecognizer, { swipeDirections } from 'react-native-swipe-container'
+import type { GestureState } from 'react-native-swipe-container'
+
+type Props = {}
+
+type State = {
+  gestureName: string,
+  backgroundColor: string
+}
+
+const styles = StyleSheet.create({
+  swiper: {
+    flex: 1
+  }
+})
+
+class SomeComponent extends React.Component<Props, State> {
   state = {
     gestureName: 'none',
     backgroundColor: '#fff'
   }
 
-  onSwipe(gestureName, gestureState) {
+  onSwipe (gestureName: string, gestureState: GestureState) {
     const {
       SWIPE_UP,
       SWIPE_DOWN,
@@ -33,59 +49,55 @@ class SomeComponent extends Component {
       SWIPE_UP_RIGHT,
       SWIPE_DOWN_LEFT,
       SWIPE_DOWN_RIGHT
-    } = swipeDirections;
+    } = swipeDirections
 
-    this.setState({gestureName: gestureName});
+    this.setState({gestureName: gestureName})
 
     switch (gestureName) {
       case SWIPE_UP:
-        this.setState({backgroundColor: 'red'});
-        break;
+        this.setState({backgroundColor: 'red'})
+        break
       case SWIPE_DOWN:
-        this.setState({backgroundColor: 'green'});
-        break;
+        this.setState({backgroundColor: 'green'})
+        break
       case SWIPE_LEFT:
-        this.setState({backgroundColor: 'blue'});
-        break;
+        this.setState({backgroundColor: 'blue'})
+        break
       case SWIPE_RIGHT:
-        this.setState({backgroundColor: 'yellow'});
-        break;
+        this.setState({backgroundColor: 'yellow'})
+        break
       case SWIPE_UP_LEFT:
-        this.setState({backgroundColor: 'mistyrose'});
-        break;
+        this.setState({backgroundColor: 'mistyrose'})
+        break
       case SWIPE_UP_RIGHT:
-        this.setState({backgroundColor: 'aquamarine'});
-        break;
+        this.setState({backgroundColor: 'aquamarine'})
+        break
       case SWIPE_DOWN_LEFT:
-        this.setState({backgroundColor: 'pink'});
-        break;
+        this.setState({backgroundColor: 'pink'})
+        break
       case SWIPE_DOWN_RIGHT:
-        this.setState({backgroundColor: 'burlywood'});
-        break;
+        this.setState({backgroundColor: 'burlywood'})
+        break
     }
   }
 
-  render() {
-
+  render () {
     return (
       <GestureRecognizer
         onSwipe={(direction, state) => this.onSwipe(direction, state)}
-        velocityThreshold={0.3},
-        distanceThreshold={40},
+        velocityThreshold={0.3}
+        distanceThreshold={40}
         angleThreshold={15}
-        style={{
-          flex: 1,
-          backgroundColor: this.state.backgroundColor
-        }}
-        >
+        style={[styles.swiper, {backgroundColor: this.state.backgroundColor}]}
+      >
         <Text>I am ready to get swiped!</Text>
         <Text>onSwipe callback received gesture: {this.state.gestureName}</Text>
       </GestureRecognizer>
-    );
+    )
   }
 }
 
-export default SomeComponent;
+export default SomeComponent
 ```
 
 ## Config
