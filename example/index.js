@@ -16,18 +16,12 @@ type State = {
 }
 
 const styles = StyleSheet.create({
-  drawerLabel: {
-    color: 'black',
-    paddingVertical: 15,
-    fontWeight: 'bold'
-  },
   swiper: {
     flex: 1
   }
 })
 
 class Example extends React.Component<Props, State> {
-
   constructor (props: Props) {
     super(props)
     this.state = {
