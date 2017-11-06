@@ -1,16 +1,3 @@
-# react-native-swipe-container
-
-React Native component for handling swipe gestures in all directions.
-
-This is based on the great work from [glepur is react-native-swipe-gestures](https://github.com/glepur/react-native-swipe-gestures)
-
-## Installation
-
-`npm i -S react-native-swipe-container`
-
-## Usage
-
-```javascript
 // @flow
 
 import * as React from 'react'
@@ -98,24 +85,3 @@ class SomeComponent extends React.Component<Props, State> {
 }
 
 export default SomeComponent
-```
-
-## Config
-
-Can be passed within optional `config` property.
-
-| Params                     | Type          | Default | Description  |
-| -------------------------- |:-------------:| ------- | ------------ |
-| velocityThreshold          | Number        | 0.3     | Velocity that has to be breached in order for swipe to be triggered |
-| distanceThreshold          | Number        | 40      | Minimum swipe distance for the swipe to be triggered |
-| angleThreshold             | Number        | 15      | Angle range to match non diagonal swipes (15 -> from -15deg to 15deg is considered horizontal) |
-| diagonalSwipe              | Boolean       | True    | Enables diagonal swipes |
-
-## Methods
-
-#### onSwipe(gestureName, gestureState)
-
-| Params        | Type          | Description  |
-| ------------- |:-------------:| ------------ |
-| gestureName   | String        | Name of the gesture (look example above) |
-| gestureState  | Object        | gestureState received from PanResponder  |
