@@ -3,9 +3,8 @@
 import * as React from 'react'
 import { Text, StyleSheet } from 'react-native'
 
-// external
+// react-native-swipe-container
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-container'
-
 import type { GestureState } from 'react-native-swipe-container'
 
 type Props = {}
